@@ -4,13 +4,22 @@ Exercise 17.5
 
 class Point(object):
     def __init__(self, x, y):
+        '''
+        Attributes: x coordinate, y coordinate
+        '''
         self.x = x
         self.y = y
 
     def __str__(self):
+        '''
+        Prints the attriubtes of a Point object
+        '''
         return '%d:%d' % (self.x, self.y)
 
     def __add__(self, other):
+        '''
+        Check if the object being added to a Point is a point or not
+        '''
         point = Point(0, 0)
         if isinstance(other, Point):
             point.x = other.x + self.x

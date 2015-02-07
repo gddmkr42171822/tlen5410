@@ -4,10 +4,16 @@ Exercies 17.3
 
 class Point(object):
     def __init__(self, x, y):
+        '''
+        Attributes: x coordinate, y coordinate
+        '''
         self.x = x
         self.y = y
 
     def __str__(self):
+        '''
+        Prints the attriubtes of a Point object
+        '''
         return '%d:%d' % (self.x, self.y)
 
 def main():
