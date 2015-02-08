@@ -1,5 +1,4 @@
 '''
-Name: Robert Werthman
 HW2
 Exercises 5.1, 6.2, 6.4, 7.4, 8.1, 8.3, 8.10, 8.12
 '''

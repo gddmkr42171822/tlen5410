@@ -1,5 +1,4 @@
 '''
-Robert Werthman
 Lab 1
 Description: Write a program that will calculate your final grade
 in the class
