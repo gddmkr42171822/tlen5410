@@ -1,5 +1,4 @@
 '''
-Name: Robert Werthman
 Lab 2
 
 
