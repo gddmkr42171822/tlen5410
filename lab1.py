@@ -1,5 +1,4 @@
 '''
-Name: Robert Werthman
 
 Lab 1: Obtain and Parse Configuration via tftp
 
