@@ -33,4 +33,4 @@ class Host(object):
         Send a packet to a destination through the connected_switch
         '''
         pkt = Packet(self.address, dst, payload)
-        self.connected_switch.receive(pkt)
+        self.connected_switch.receive(pkt, self)

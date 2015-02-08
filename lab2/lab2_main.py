@@ -44,7 +44,8 @@ def main():
     h0.printConnected_switch()
 
     # Send data from Host 0 to Host 1
-    #h0.send(h1.address)
+    h0.send(h1.address)
+    #h1.send(h0.address)
 
     # Print out the values of ports & forward table from the switch
     s0.printPorts()

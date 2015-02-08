@@ -39,3 +39,30 @@ class Switch(object):
         '''
         self.ports.append(device)
 
+    def receive(self, pkt, sender):
+        '''
+        1. Receive a packet.
+        2. Add packet source address and received-on port to
+        forwardtable of switch if it's not there.
+        '''
+        if pkt.src not in self.forwardtable:
+            self.forwardtable[pkt.src] = self.ports.index(sender)
+
+    def forward(self, pkt, sender):
+        '''
+        1. Add packet source address to forwardtable of switch if it's
+        not there.
+        2. If packet destination address is in the forwardtable then
+        send it to next host.
+        3. If packet destination address is not in the forwardtable
+        call broadcast method
+        '''
+        pass
+
+    def broadcast(self, pkt):
+        '''
+        Broadcast packet out all of the switchports except the one
+        it received the packet from
+        '''
+        pass
+
