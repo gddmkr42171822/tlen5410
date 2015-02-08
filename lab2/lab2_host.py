@@ -34,3 +34,6 @@ class Host(object):
         '''
         pkt = Packet(self.address, dst, payload)
         self.connected_switch.receive(pkt, self)
+
+    def receive(self, pkt):
+        print pkt.payload

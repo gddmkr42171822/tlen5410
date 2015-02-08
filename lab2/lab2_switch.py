@@ -44,25 +44,33 @@ class Switch(object):
         1. Receive a packet.
         2. Add packet source address and received-on port to
         forwardtable of switch if it's not there.
+        3. If packet destination address is in the forwardtable then
+        call forward method.
+        4. If packet destination address is not in the forwardtable
+        call broadcast method
         '''
         if pkt.src not in self.forwardtable:
             self.forwardtable[pkt.src] = self.ports.index(sender)
+        if pkt.dst in self.forwardtable:
+            self.forward(pkt)
+        else:
+            self.broadcast(pkt, sender)
 
-    def forward(self, pkt, sender):
-        '''
-        1. Add packet source address to forwardtable of switch if it's
-        not there.
-        2. If packet destination address is in the forwardtable then
-        send it to next host.
-        3. If packet destination address is not in the forwardtable
-        call broadcast method
-        '''
-        pass
 
-    def broadcast(self, pkt):
+    def forward(self, pkt):
+        '''
+        1. Get the hostname from the port in the forwardtable
+         and send the packet to the next device
+        '''
+        (self.ports[self.forwardtable[pkt.dst]]).receive(pkt, self)
+
+    def broadcast(self, pkt, sender):
         '''
         Broadcast packet out all of the switchports except the one
         it received the packet from
         '''
+        for device in self.ports:
+            if device.address != sender.address:
+                device.receive(pkt)
         pass
 
