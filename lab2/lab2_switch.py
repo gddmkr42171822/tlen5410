@@ -37,6 +37,8 @@ class Switch(object):
         '''
         Connects a switch to a device
         '''
+        print 'Connecting {0} to {1}'.format(self.hostname, \
+        device.hostname)
         self.ports.append(device)
 
     def receive(self, pkt, sender):
@@ -62,6 +64,7 @@ class Switch(object):
         1. Get the hostname from the port in the forwardtable
          and send the packet to the next device
         '''
+        print 'Forward'
         (self.ports[self.forwardtable[pkt.dst]]).receive(pkt, self)
 
     def broadcast(self, pkt, sender):
@@ -69,8 +72,9 @@ class Switch(object):
         Broadcast packet out all of the switchports except the one
         it received the packet from
         '''
+        print 'Broadcast'
         for device in self.ports:
             if device.address != sender.address:
-                device.receive(pkt)
+                device.receive(pkt, self)
         pass
 
