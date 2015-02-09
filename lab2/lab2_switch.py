@@ -64,7 +64,7 @@ class Switch(object):
         1. Get the hostname from the port in the forwardtable
          and send the packet to the next device
         '''
-        print self.hostname + ' forward'
+        #print self.hostname + ' forward'
         (self.ports[self.forwardtable[pkt.dst]]).receive(pkt, self)
 
     def broadcast(self, pkt, sender):
@@ -72,7 +72,7 @@ class Switch(object):
         Broadcast packet out all of the switchports except the one
         it received the packet from
         '''
-        print self.hostname + ' broadcast'
+        #print self.hostname + ' broadcast'
         for device in self.ports:
             if device.address != sender.address:
                 device.receive(pkt, self)
