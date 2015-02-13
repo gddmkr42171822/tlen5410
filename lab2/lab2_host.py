@@ -10,21 +10,22 @@ class Host(object):
 
     def __str__(self):
         '''
-        Print the hostname and address of the host
+        Job: Print the hostname and address of the host
         '''
         return 'hostname: {0} address: {1}'.format( \
         self.hostname, self.address)
 
     def printConnected_switch(self):
         '''
-        Print the hostname of the switch the host is connected to
+        Job: Print the hostname of the switch the host is connected to
         '''
         print '\nhost |{0}| connected to switch |{1}|'.format(\
         self.hostname, self.connected_switch.hostname)
 
     def connect(self, switch):
         '''
-        Connect the host to a switch
+        Job: Connect the host to a switch
+        Input: a switch object
         '''
         print 'Connecting {0} to {1}'.format(self.hostname, \
         switch.hostname)
@@ -32,7 +33,7 @@ class Host(object):
 
     def send(self, dst, payload = 'Hello World!'):
         '''
-        Send a packet to a destination through the connected_switch
+        Job: Send a packet to a destination through the connected_switch
         '''
         print 'Sending data from {0} ({1}) to {2} ({3})'.format(\
         self.hostname, self.address, dst.hostname, dst.address)
@@ -41,8 +42,8 @@ class Host(object):
 
     def receive(self, pkt, device):
         '''
-        Print the packet payload if it has the same destination address
-        as the current host
+        Job: Print the packet payload if it has the same destination address
+             as the current host
         '''
         if pkt.dst == self.address:
             print 'Host {0} ({1}) : Received "{2}" from {3}'.format(\

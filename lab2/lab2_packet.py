@@ -15,8 +15,8 @@ class Packet(object):
 
     def __str__(self):
         '''
-        Prints the source address, destination address, and payload
-        of a packet
+        Job: Prints the source address, destination address, and payload
+             of a packet
         '''
         return '\nsrc: {0} dst: {1} payload: {2}'.format(self.src, self.dst,\
         self.payload)

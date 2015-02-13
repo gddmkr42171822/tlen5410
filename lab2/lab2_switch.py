@@ -11,14 +11,14 @@ class Switch(object):
 
     def __str__(self):
         '''
-        Prints the hostname and address of the switch
+        Job: Prints the hostname and address of the switch
         '''
         return 'hostname: {0} address: {1}'.format(self.hostname, \
         self.address)
 
     def printPorts(self):
         '''
-        Prints the ports and associated hosts of the switch
+        Job: Prints the ports and associated hosts of the switch
         '''
         print '\n' + self.hostname + ' port list:'
         for port, host in enumerate(self.ports):
@@ -26,8 +26,8 @@ class Switch(object):
 
     def printForwardtable(self):
         '''
-        Prints the mac address table (address and associated port)
-        of the switch
+        Job: Prints the mac address table (address and associated port)
+             of the switch
         '''
         print '\n' + self.hostname + ' forwardtable:'
         for address, port in self.forwardtable.iteritems():
@@ -35,7 +35,7 @@ class Switch(object):
 
     def connect(self, device):
         '''
-        Connects a switch to a device
+        Job: Connects a switch to a device
         '''
         print 'Connecting {0} to {1}'.format(self.hostname, \
         device.hostname)
@@ -43,13 +43,14 @@ class Switch(object):
 
     def receive(self, pkt, sender):
         '''
+        Job: 
         1. Receive a packet.
         2. Add packet source address and received-on port to
-        forwardtable of switch if it's not there.
+           forwardtable of switch if it's not there.
         3. If packet destination address is in the forwardtable then
-        call forward method.
+           call forward method.
         4. If packet destination address is not in the forwardtable
-        call broadcast method
+           call broadcast method
         '''
         if pkt.src not in self.forwardtable:
             self.forwardtable[pkt.src] = self.ports.index(sender)
@@ -61,20 +62,19 @@ class Switch(object):
 
     def forward(self, pkt):
         '''
-        1. Get the hostname from the port in the forwardtable
-         and send the packet to the next device
+        Job: Get the hostname from the port in the forwardtable
+             and send the packet to the next device
         '''
         #print self.hostname + ' forward'
         (self.ports[self.forwardtable[pkt.dst]]).receive(pkt, self)
 
     def broadcast(self, pkt, sender):
         '''
-        Broadcast packet out all of the switchports except the one
-        it received the packet from
+        Job: Broadcast packet out all of the switchports except the one
+             it received the packet from
         '''
         #print self.hostname + ' broadcast'
         for device in self.ports:
             if device.address != sender.address:
                 device.receive(pkt, self)
-        pass
 

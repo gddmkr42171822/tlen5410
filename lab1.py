@@ -50,7 +50,7 @@ Output: dictionary with values: hostname, version; key: ip address
 '''
 def readFile(l, d):
     for x in l:
-        f = open(x)
+        f = open('/home/netman/Desktop/' + x)
         for line in f:
             line = line.strip()
             if 'version' in line:
