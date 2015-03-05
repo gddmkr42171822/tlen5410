@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
-    <h1>Monitor Router: {{router}}</h1>
+    <h1>Monitoring Router: <ins>{{router}}</ins></h1>
     <body>
-        <a href="/">Main Page</a>
+        <dl>
+            <dt><b>Hostname:</b></dt><dd><ins>{{sysname}}<ins/></dd>
+            <dt><b>Contact:</b></dt><dd><ins>{{syscontact}}</ins></dd>
+        </dl>
+        <a href="/">Return to Main Page</a>
     </body>
 </html>
