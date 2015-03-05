@@ -5,11 +5,11 @@
 <body>
     <form action="/monitor" method="POST">
         <fieldset>
-            <legend>Enter the IP address of a router to begin:</legend>
-            <label for="ip1">Router:</label><br />
-            <input type="text" name="ip1" size="15" maxlength="15"
-                        placeholder="IP address" required="required"/><br />
-            <input type="submit" name="submit" value="Submit"/><br />
+            <legend>Choose an ip address to monitor:</legend>
+            <select name="routerip">
+                <option value="198.51.100.3">198.51.100.3</option>
+            </select>
+            <input type="submit" value="Monitor">
         </fieldset>
     </form>
 </body>

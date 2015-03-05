@@ -9,10 +9,8 @@ def home():
 
 @app.route("/monitor", methods=['GET', 'POST'])
 def monitor():
-    ip = flask.request.form['ip1']
-    if ip != '198.51.100.3':
-        return flask.render_template('error.html', error='IP does not exist!')
-    else:
+    if flask.request.method == 'POST':
+        ip = flask.request.form['routerip']
         router = SNMPTool.Router(ip, 'password')
         sysname = router.retrieveHostname()
         syscontact = router.retrieveContact()
