@@ -12,5 +12,22 @@
             <input type="submit" value="Monitor">
         </fieldset>
     </form>
+    <h2>Or</h2>
+    <form action="/change" method="POST">
+        <fieldset>
+            <legend>Choose an ip address and change a router setting:</legend>
+            <select name="routerip">
+                <option value="198.51.100.3">198.51.100.3</option>
+            </select>
+            <legend>Choose the field you would like to change:</legend>
+            <select name="attribute">
+                <option value="hostname">hostname</option>
+                <option value="contact">contact</option>
+                <option value="location">location</option>
+            </select>
+            <input type = "text" name="newvalue" required="required">
+            <input type="submit" value="Change">
+        </fieldset>
+    </form>
 </body>
 </html>

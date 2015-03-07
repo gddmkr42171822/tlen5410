@@ -5,7 +5,26 @@
         <dl>
             <dt><b>Hostname:</b></dt><dd><ins>{{sysname}}<ins/></dd>
             <dt><b>Contact:</b></dt><dd><ins>{{syscontact}}</ins></dd>
+            <dt><b>Uptime:</b></dt><dd><ins>{{sysuptime}}</ins></dd>
+            <dt><b>Location:</b></dt><dd><ins>{{syslocation}}</ins></dd>
         </dl>
+        <table>
+            <thead><tr><th>Route Table</th></tr></thead>
+            <tbody>
+            <tr>
+                <th>Destination</th>
+                <th>Mask</th>
+                <th>Next Hop</th>
+            </tr>
+            {% for x in range(0,lsize) %}
+            <tr>
+                <td>{{destlist[loop.index-1]}}</td>
+                <td>{{masklist[loop.index-1]}}</td>
+                <td>{{hoplist[loop.index-1]}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
         <a href="/">Return to Main Page</a>
     </body>
 </html>
