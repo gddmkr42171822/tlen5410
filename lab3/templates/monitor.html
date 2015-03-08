@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+    <link href="{{ url_for('static',filename='css/stylesheet.css') }}" type="text/css" rel="stylesheet">
     <head><meta http-equiv="refresh" content="{{rrate}}"></head>
     <h1>Monitoring Router: <ins>{{router}}</ins></h1>
     <form action="/change" method="POST">
@@ -23,14 +24,12 @@
         </fieldset>
     </form>
     <body>
-        <dl>
-            <dt><b>Hostname:</b></dt><dd><ins>{{sysname}}<ins/></dd>
-            <dt><b>Contact:</b></dt><dd><ins>{{syscontact}}</ins></dd>
-            <dt><b>Uptime:</b></dt><dd><ins>{{sysuptime}}</ins></dd>
-            <dt><b>Location:</b></dt><dd><ins>{{syslocation}}</ins></dd>
-        </dl>
+        <h4>Hostname:<h5>{{sysname}}</h5></h4>
+        <h4>Contact:<h5>{{syscontact}}</h5></h4>
+        <h4>Uptime:<h5>{{sysuptime}}</h5></h4>
+        <h4>Location:<h5>{{syslocation}}</h5></h4>
         <table>
-            <thead><tr><th>Route Table</th></tr></thead>
+            <thead><tr><th colspan="4">Route Table</th></tr></thead>
             <tbody>
             <tr>
                 <th>Destination</th>
@@ -48,11 +47,12 @@
             {% endfor %}
             </tbody>
         </table>
+        <br>
         <table>
-            <thead><tr><th>CDP Neighbors Table</th></tr></thead>
+            <thead><tr><th colspan="2">CDP Neighbors Table</th></tr></thead>
             <tbody>
             <tr>
-                <th>Neigbhor</th>
+                <th>Neighbor</th>
                 <th>Local Interface</th>
             </tr>
             {% for x in range(0,cdpsize) %}
@@ -63,6 +63,7 @@
             {% endfor %}
             </tbody>
         </table>
+        <br>
         <a href="/">Return to Main Page</a>
     </body>
 </html>

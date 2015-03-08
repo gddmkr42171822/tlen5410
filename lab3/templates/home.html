@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-<title>This is the homepage</title>
+<link href="{{ url_for('static',filename='css/stylesheet.css') }}" type="text/css" rel="stylesheet">
+<title>SNMP Homepage</title>
 <h1>{{pagename}}</h1>
 <body>
     <form action="/monitor" method="POST">

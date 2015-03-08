@@ -13,7 +13,7 @@ def monitor():
             if flask.request.form.get('routerip') is not None:
                 flask.session['ip'] = flask.request.form['routerip']
             if flask.request.form.get('rate') is None:
-                flask.session['rrate'] = "5"
+                flask.session['rrate'] = "60"
             else:
                 flask.session['rrate'] = flask.request.form['rate']
     router = SNMPTool.Router(flask.session['ip'], 'public')
