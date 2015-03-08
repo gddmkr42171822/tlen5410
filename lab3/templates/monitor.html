@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html>
+    <head><meta http-equiv="refresh" content="{{rrate}}"></head>
     <h1>Monitoring Router: <ins>{{router}}</ins></h1>
+    <form action="/change" method="POST">
+        <fieldset>
+            <legend>Choose the field you would like to change:</legend>
+            <select name="attribute">
+                <option value="hostname">hostname</option>
+                <option value="contact">contact</option>
+                <option value="location">location</option>
+            </select>
+            <input type = "text" name="newvalue" required="required">
+            <input type="submit" value="Change">
+        </fieldset>
+    </form>
+    <form action="/monitor" method="POST">
+        <fieldset>
+            <legend>Change the refresh rate:</legend>
+            Refresh Rate (Seconds): <br>
+            <input type = "text" name="rate">
+            <input type="submit" value="Change">
+        </fieldset>
+    </form>
     <body>
         <dl>
             <dt><b>Hostname:</b></dt><dd><ins>{{sysname}}<ins/></dd>
@@ -15,12 +36,29 @@
                 <th>Destination</th>
                 <th>Mask</th>
                 <th>Next Hop</th>
+                <th>Metric</th>
             </tr>
-            {% for x in range(0,lsize) %}
+            {% for x in range(0,routesize) %}
             <tr>
-                <td>{{destlist[loop.index-1]}}</td>
-                <td>{{masklist[loop.index-1]}}</td>
-                <td>{{hoplist[loop.index-1]}}</td>
+                <td>{{destlist[x]}}</td>
+                <td>{{masklist[x]}}</td>
+                <td>{{hoplist[x]}}</td>
+                <td>{{metriclist[x]}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <table>
+            <thead><tr><th>CDP Neighbors Table</th></tr></thead>
+            <tbody>
+            <tr>
+                <th>Neigbhor</th>
+                <th>Local Interface</th>
+            </tr>
+            {% for x in range(0,cdpsize) %}
+            <tr>
+                <td>{{idlist[x]}}</td>
+                <td>{{portlist[x]}}</td>
             </tr>
             {% endfor %}
             </tbody>

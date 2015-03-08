@@ -50,39 +50,57 @@ class Router(object):
         varlist = netsnmp.VarList(self.syslocation)
         self.session.set(varlist)
 
+    def retrieveCDPneighbors(self):
+        cdpdeviceport = netsnmp.Varbind('.1.3.6.1.4.1.9.9.23.1.2.1.1.7')
+        cdpdeviceid = netsnmp.Varbind('.1.3.6.1.4.1.9.9.23.1.2.1.1.6')
+        idvarlist = netsnmp.VarList(cdpdeviceid)
+        portvarlist = netsnmp.VarList(cdpdeviceport)
+        self.session.walk(idvarlist)
+        self.session.walk(portvarlist)
+        portlist = []
+        idlist = []
+        for x in idvarlist:
+            idlist.append(x.val)
+        for x in portvarlist:
+            portlist.append(x.val)
+        return idlist, portlist
+
+
+
     def retrieveRouteTable(self):
-        ifnumber = netsnmp.Varbind('.1.3.6.1.2.1.2.1.0')
+        ifnumber = netsnmp.Varbind('.1.3.6.1.2.1.4.24.3.0')
         vl = netsnmp.VarList(ifnumber)
         self.session.get(vl)
         iproutedest = netsnmp.Varbind('.1.3.6.1.2.1.4.24.4.1.1')
         iproutemask = netsnmp.Varbind('.1.3.6.1.2.1.4.24.4.1.2')
         iproutenexthop = netsnmp.Varbind('.1.3.6.1.2.1.4.24.4.1.4')
+        iproutemetric = netsnmp.Varbind('.1.3.6.1.2.1.4.24.4.1.11')
         varlist = netsnmp.VarList()
         varlist.append(iproutedest)
         varlist.append(iproutemask)
         varlist.append(iproutenexthop)
+        varlist.append(iproutemetric)
         destlist = []
         masklist = []
         hoplist = []
-        finallist = []
-        for i in range(0, int(ifnumber.val)-1):
+        metriclist = []
+        for i in range(0, int(ifnumber.val)):
             self.session.getnext(varlist)
             destlist.append(iproutedest.val)
             masklist.append(iproutemask.val)
             hoplist.append(iproutenexthop.val)
-        finallist.append(destlist)
-        finallist.append(masklist)
-        finallist.append(hoplist)
-        print len(finallist[0])
-        return finallist
+            metriclist.append(iproutemetric.val)
+        return destlist, masklist, hoplist, metriclist
+
 
 
 def main():
-    r = Router('198.51.100.3', 'password')
+    r = Router('172.20.74.101', 'public')
     print r.retrieveHostname()
     print r.retrieveContact()
     print r.retrieveLocation()
     print r.retrieveRouteTable()
+    print r.retrieveCDPneighbors()
 
 
 if __name__ == '__main__':
