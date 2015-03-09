@@ -4,15 +4,13 @@
 <title>SNMP Homepage</title>
 <h1>{{pagename}}</h1>
 <body>
-    <form action="/monitor" method="POST">
-        <fieldset>
-            <legend>Choose an ip address to monitor:</legend>
+    <form class="main" action="/monitor" method="POST">
+            <h3>Choose an ip address to monitor:</h3>
             <select name="routerip">
                 <option value="198.51.100.3">198.51.100.3</option>
                 <option value="172.20.74.101">172.20.74.101</option>
             </select>
             <input type="submit" value="Monitor">
-        </fieldset>
     </form>
 </body>
 </html>
