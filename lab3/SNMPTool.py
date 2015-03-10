@@ -1,8 +1,17 @@
+'''
+SNMPTool.py
+This file defines methods that use netsnmp to interact 
+with a router.
+'''
 import netsnmp
 
 class Router(object):
 
     def __init__(self, desthost, community):
+        '''
+        Creates and snmp session and creates the varbinds for
+        hostname, contact, and location
+        '''
         self.session = netsnmp.Session(DestHost=desthost, Community=community,
                                 Version = 1)
         self.sysname = netsnmp.Varbind('.1.3.6.1.2.1.1.5.0')
@@ -10,22 +19,34 @@ class Router(object):
         self.syslocation = netsnmp.Varbind('.1.3.6.1.2.1.1.6.0')
 
     def retrieveHostname(self):
+        '''
+        Returns the hostname of a router.
+        '''
         varlist = netsnmp.VarList(self.sysname)
         self.session.get(varlist)
         return self.sysname.val
 
     def setHostname(self, hostname):
+        '''
+        Changes the hostname of a router.
+        '''
         self.retrieveHostname()
         self.sysname.val = hostname
         varlist = netsnmp.VarList(self.sysname)
         self.session.set(varlist)
 
     def retrieveContact(self):
+        '''
+        Returns the contact of a router.
+        '''
         varlist = netsnmp.VarList(self.syscontact)
         self.session.get(varlist)
         return self.syscontact.val
 
     def setContact(self, contact):
+        '''
+        Changes the contact of a router.
+        '''
         self.retrieveContact()
         self.syscontact.val = contact
         varlist = netsnmp.VarList(self.syscontact)
@@ -33,6 +54,9 @@ class Router(object):
 
 
     def retrieveUptime(self):
+        '''
+        Returns the uptime of a router.
+        '''
         sysuptime = netsnmp.Varbind('.1.3.6.1.2.1.1.3.0')
         varlist = netsnmp.VarList(sysuptime)
         self.session.get(varlist)
@@ -40,17 +64,26 @@ class Router(object):
 
 
     def retrieveLocation(self):
+        '''
+        Returns the location of a router.
+        '''
         varlist = netsnmp.VarList(self.syslocation)
         self.session.get(varlist)
         return self.syslocation.val
 
     def setLocation(self, location):
+        '''
+        Changes the location of a router.
+        '''
         self.retrieveLocation()
         self.syslocation.val = location
         varlist = netsnmp.VarList(self.syslocation)
         self.session.set(varlist)
 
     def retrieveCDPneighbors(self):
+        '''
+        Returns two lists about a router's cdp neighbors.
+        '''
         cdpdeviceport = netsnmp.Varbind('.1.3.6.1.4.1.9.9.23.1.2.1.1.7')
         cdpdeviceid = netsnmp.Varbind('.1.3.6.1.4.1.9.9.23.1.2.1.1.6')
         idvarlist = netsnmp.VarList(cdpdeviceid)
@@ -68,6 +101,9 @@ class Router(object):
 
 
     def retrieveRouteTable(self):
+        '''
+        Returns four lists about a router's routing table.
+        '''
         ifnumber = netsnmp.Varbind('.1.3.6.1.2.1.4.24.3.0')
         vl = netsnmp.VarList(ifnumber)
         self.session.get(vl)
