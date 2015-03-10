@@ -37,6 +37,9 @@ table.big {
 h1 {
     font-family: "Courier New", Courier, monospace;
     text-align: center;
+    border-bottom: 2px solid black;
+    background-color: green;
+    text-shadow: 2px 2px #00CC00;
 }
 
 form.main {
@@ -54,3 +57,4 @@ from.search {
 form.rfresh {
     float: right;
 }
+
