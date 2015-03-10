@@ -1,7 +1,7 @@
 '''
 web.py
 
-This file defines this particular 
+This file defines this particular
 snmp web application using the Python Flask microframework.
 
 '''
@@ -11,21 +11,21 @@ import SNMPTool
 
 app = flask.Flask(__name__)
 
-@app.route("/", methods=['GET', 'POST'])
 '''
 Handles the main web page.
 Asks for an ip to monitor.
 '''
+@app.route("/", methods=['GET', 'POST'])
 def home():
     return flask.render_template('home.html', pagename='SNMP: Main Page')
 
-@app.route("/monitor", methods=['GET', 'POST'])
 '''
 Handles the monitor page.
 Displays router attributes:
     hostname, location, contact, uptime, routing table, cdp neighbors
 Asks for changes to the page refresh rate and hostname, location, contact
 '''
+@app.route("/monitor", methods=['GET', 'POST'])
 def monitor():
     if flask.request.method == 'POST':
             if flask.request.form.get('routerip') is not None:
@@ -51,11 +51,11 @@ def monitor():
                     metriclist=routetable[3], routesize=routesize, cdpsize = cdpsize,
                     idlist = cdptable[0], portlist = cdptable[1], rrate=flask.session['rrate'])
 
-@app.route("/change", methods=['POST'])
 '''
 Called in the monitor page.
 Handles the changing the hostname, contact, and location
 '''
+@app.route("/change", methods=['POST'])
 def change():
     router = SNMPTool.Router(flask.session['ip'], 'public')
     if flask.request.form['attribute'] == 'hostname':
