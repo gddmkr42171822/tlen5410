@@ -23,11 +23,30 @@ def emailAdmin(error):
     server.sendmail(fromaddr, toaddrs, msg)
     server.quit()
 
-def handleConfigTrap(ip):
+def handleConfigTrap(ip, trap):
     ip = ip.strip('[]')
     lab1.getConfig(ip)
     lab1.saveConfig(ip)
-    emailAdmin("Router {0}'s config changed!".format(ip))
+    error = '\n'.join(trap)
+    emailAdmin(error)
+
+def handleLinkTrap(trap):
+    '''
+    f = open("/tmp/test.log", "w")
+    error = "\n".join(trap)
+    f.write(error)
+    '''
+    error = '\n'.join(trap)
+    emailAdmin(error)
+
+def handlePingTrap(trap):
+    '''
+    f = open("/tmp/test.log", "w")
+    error = "\n".join(trap)
+    f.write(error)
+    '''
+    error = '\n'.join(trap)
+    emailAdmin(error)
 
 def handleTrap(trap):
     prog = re.compile('(\[[0-9]+\.[0-9]+\.[0-9]+\.[0-9]\])')
@@ -36,9 +55,14 @@ def handleTrap(trap):
         matchIP = prog.search(line)
         if matchIP:
             ip =  matchIP.group(0)
-        if "SNMPv2-SMI::enterprises.9.9.43." in line:
-            handleConfigTrap(ip)
+        if "SNMPv2-SMI::enterprises.9.9.43.2.0.1" in line:
+            handleConfigTrap(ip, trap)
             break
+        elif any(substring in line for substring in ["linkUp", "linkDown"]):
+            handleLinkTrap(trap)
+            break
+        elif "SNMPv2-SMI::mib-2.16.0.1" in line:
+            handlePingTrap(trap)
 
 def main():
     trap = []
@@ -48,6 +72,11 @@ def main():
             trap.append(line)
         except EOFError:
             break
+    '''
+    f = open("/tmp/test.log", "w")
+    error = "\n".join(trap)
+    f.write(error)
+    '''
     handleTrap(trap)
 
 if __name__=='__main__':
