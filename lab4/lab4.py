@@ -31,20 +31,10 @@ def handleConfigTrap(ip, trap):
     emailAdmin(error)
 
 def handleLinkTrap(trap):
-    '''
-    f = open("/tmp/test.log", "w")
-    error = "\n".join(trap)
-    f.write(error)
-    '''
     error = '\n'.join(trap)
     emailAdmin(error)
 
 def handlePingTrap(trap):
-    '''
-    f = open("/tmp/test.log", "w")
-    error = "\n".join(trap)
-    f.write(error)
-    '''
     error = '\n'.join(trap)
     emailAdmin(error)
 
@@ -72,11 +62,6 @@ def main():
             trap.append(line)
         except EOFError:
             break
-    '''
-    f = open("/tmp/test.log", "w")
-    error = "\n".join(trap)
-    f.write(error)
-    '''
     handleTrap(trap)
 
 if __name__=='__main__':
