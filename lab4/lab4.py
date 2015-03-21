@@ -9,6 +9,9 @@ import re
 import smtplib
 import lab1
 
+'''
+Emails an email address if a specified trap occurs.
+'''
 def emailAdmin(error):
     fromaddr = "bobdallas.tlen5540@gmail.com"
     password = "netman2015"
@@ -23,6 +26,10 @@ def emailAdmin(error):
     server.sendmail(fromaddr, toaddrs, msg)
     server.quit()
 
+'''
+If a config trap is generated this method gets a copy of the router config
+and saves it if there are changes.  It then emails the admin about the trap.
+'''
 def handleConfigTrap(ip, trap):
     ip = ip.strip('[]')
     lab1.getConfig(ip)
@@ -30,14 +37,25 @@ def handleConfigTrap(ip, trap):
     error = '\n'.join(trap)
     emailAdmin(error)
 
+'''
+Emails the admin if there is a link state change.
+'''
 def handleLinkTrap(trap):
     error = '\n'.join(trap)
     emailAdmin(error)
 
+'''
+Emails the admin if a rsing threshold is met for incoming bytes on an
+interface
+'''
 def handlePingTrap(trap):
     error = '\n'.join(trap)
     emailAdmin(error)
 
+'''
+This method determines which trap was received and calls the appropriate
+trap handler.
+'''
 def handleTrap(trap):
     prog = re.compile('(\[[0-9]+\.[0-9]+\.[0-9]+\.[0-9]\])')
     ip = ''
@@ -54,6 +72,10 @@ def handleTrap(trap):
         elif "SNMPv2-SMI::mib-2.16.0.1" in line:
             handlePingTrap(trap)
 
+'''
+Waits on the command line for all the lines of a snmp trap and then handles
+the trap.
+'''
 def main():
     trap = []
     while True:

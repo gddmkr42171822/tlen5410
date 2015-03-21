@@ -2,7 +2,6 @@
 
 Lab 1: Obtain and Parse Configuration via tftp
 
-
 '''
 
 import tftpy
@@ -10,18 +9,15 @@ import os
 import filecmp
 
 '''
-Description: Grabs config file from router
-Input: list of ip address
-Output: new files with router configs
+Gets a router configuration from a router and saves it in the tmp folder.
 '''
 def getConfig(ip):
     connection = tftpy.TftpClient(ip, 69)
     connection.download('/startup-config','/tmp/' + ip + '_tmp')
 
 '''
-Description: Creates router directory if it doesn't exist
-Input: dictionary
-Output: Saves config file or there are no changes
+Saves the downloaded config if there aren't any for the router otherwise
+it compares it to the other router configs to see if there are changes.
 '''
 def saveConfig(ip):
     path = '/tmp/{0}/'.format(ip)
@@ -32,9 +28,8 @@ def saveConfig(ip):
         os.rename('/tmp/' + ip + '_tmp', '/tmp/{0}/{0}_v1'.format(ip))
 
 '''
-Description: Checks the differenc ein a file
-Input: ip address, path to old configs, dictionary
-Output: saves new config or finds no changes
+Checks for changes between router configs.  If there is it creates a new
+router config version and saves the newest one as it.
 '''
 def compareConfigs(path, ip):
     l = []
