@@ -1,7 +1,13 @@
 '''
+Lab 4
+Names: Robert Werthman, Dallas Hays
+
 Sources:
 1. http://www.mkyong.com/python/how-do-send-email-in-python-via-smtplib/
 - How to send an email with python and smtp.
+
+2. Cisco SNMP Object Navigator
+- Look up oid of managed objects
 
 '''
 
