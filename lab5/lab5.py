@@ -41,7 +41,7 @@ def Graph(xcord, ycord, graphTitle, fileName):
     title(graphTitle)
     savefig(fileName)
 
-def TopPorts(log):
+def TopPorts(log, file):
     counter = {}
     protocolCounter = {}
     portsL = []
@@ -71,10 +71,10 @@ def TopPorts(log):
             serviceL.append(PortLookup(port, 'udp'))
     # Create a graph of port/service vs traffic
     graphTitle = 'Top 10 Remote Ports By Amount Of Traffic'
-    fileName = 'top_ports.png'
+    fileName = 'top_ports_{0}.png'.format(file)
     Graph(serviceL, octetsL, graphTitle, fileName)
 
-def TopRemoteHosts(log):
+def TopRemoteHosts(log, file):
     counter = {}
     octetsL = []
     remoteIPL = []
@@ -97,7 +97,7 @@ def TopRemoteHosts(log):
         remoteHostName.append(DNSLookup(ip))
     # Create a graph of IP address vs traffic
     graphTitle = 'Top 10 Remote Sites Accessed By Traffic Generated'
-    fileName = 'top_remote.png'
+    fileName = 'top_remote_{0}.png'.format(file)
     Graph(remoteHostName, octetsL, graphTitle, fileName)
 
 def TotalBandwidth(log):
@@ -114,15 +114,18 @@ def UserInput():
     if flowFile == '1':
         try:
             log = flowd.FlowLog('flowd_capture_1')
-            TopPorts(log)
+            TopPorts(log, 'flowd_capture_1')
             log = flowd.FlowLog('flowd_capture_1')
-            TopRemoteHosts(log)
+            TopRemoteHosts(log, 'flowd_capture_1')
         except IOError:
             print 'flowd_capture_1 not found.'
             return UserInput()
     elif flowFile == '2':
         try:
             log = flowd.FlowLog('flowd_capture_2')
+            TopPorts(log, 'flowd_capture_2')
+            log = flowd.FlowLog('flowd_capture_2')
+            TopRemoteHosts(log, 'flowd_capture_2')
         except IOError:
             print 'flowd_capture_2 not found.'
             return UserInput()
