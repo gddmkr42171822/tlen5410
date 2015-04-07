@@ -1,4 +1,7 @@
 '''
+Lab 5
+
+Names: Robert Werthman (rowe7280), Derrick D'Souza (deds7325)
 
 Sources:
 1. http://stackoverflow.com/questions/6170246/how-do-i-use-matplotlib-autopct
@@ -32,9 +35,9 @@ def Graph(xcord, ycord, graphTitle, fileName):
     figure(figsize=(13,13))
     colors = ['orangered', 'green', 'skyblue', 'pink',\
     'steelblue', 'yellow', 'orange', 'silver', 'blueviolet', 'grey']
-    ycord = [int(i) for i in ycord]
-    percent_ycord = [(float(i)/sum(ycord))*100 for i in ycord]
-    labels = ['{0} - {1:0.2f}% ({2} Bytes)'.format(x, percent, y) for x, percent, y in zip(xcord, percent_ycord, ycord)]
+    #ycord = [int(i) for i in ycord]
+    percent_ycord = [(i/sum(ycord))*100 for i in ycord]
+    labels = ['{0} - {1:0.2f}% ({2:0.2f} KiloBytes)'.format(x, percent, y) for x, percent, y in zip(xcord, percent_ycord, ycord)]
     values = ycord
     patches, texts = pie(values, colors=colors, shadow=True)
     legend(patches, labels, loc='upper left')
@@ -61,7 +64,7 @@ def TopPorts(log, file):
     for port, octets in counter.iteritems():
         if octets in sortedValues:
             portsL.append(port)
-            octetsL.append(octets)
+            octetsL.append(float(octets)/1024)
             protocolL.append(protocolCounter[port])
     # Find the service related to the highest used ports
     for port, protocol in zip(portsL, protocolL):
@@ -91,7 +94,7 @@ def TopRemoteHosts(log, file):
     for ip, octets in counter.iteritems():
         if octets in sortedValues:
             remoteIPL.append(ip)
-            octetsL.append(octets)
+            octetsL.append(float(octets)/1024)
     # Lookup hostname of ip address
     for ip in remoteIPL:
         remoteHostName.append(DNSLookup(ip))
