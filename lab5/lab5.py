@@ -39,7 +39,10 @@ def Graph(xcord, ycord, graphTitle, fileName):
     if not isinstance(xcord[0], tuple):
         labels = ['{0} - {1:0.2f}% ({2:0.2f} KiloBytes)'.format(x, percent, y) for x, percent, y in zip(xcord, percent_ycord, ycord)]
     else:
-        labels = ['Src Address: {0} Dst Address: {1} - {2:0.2f}% ({3:0.2f} KiloBytes)'.format(x[1], x[0], percent, y) for x, percent, y in zip(xcord, percent_ycord, ycord)]
+        if not isinstance(xcord[0][1], long):
+            labels = ['Src Address: {0} Dst Address: {1} - {2:0.2f}% ({3:0.2f} KiloBytes)'.format(x[1], x[0], percent, y) for x, percent, y in zip(xcord, percent_ycord, ycord)]
+        else:
+            labels = ['Local Host: {0} Port: {1} - {2:0.2f}% ({3:0.2f} KiloBytes)'.format(x[0], x[1], percent, y) for x, percent, y in zip(xcord, percent_ycord, ycord)]
     values = ycord
     patches, texts = pie(values, colors=colors, shadow=True)
     legend(patches, labels, loc='upper left')
@@ -109,7 +112,6 @@ def TopLocalToRemote(log, file):
     counter = {}
     ipports = {}
     octetsL = []
-    protocolL = []
     remoteIPL = []
     localIPL = []
     remoteHostName = []
@@ -132,6 +134,26 @@ def TopLocalToRemote(log, file):
     fileName = 'remote_local_{0}.png'.format(file)
     Graph(remoteHostName, octetsL, graphTitle, fileName)
 
+def TopLocalHostLocalPort(log, file):
+    counter = {}
+    ipports = []
+    octetsL = []
+    for flow in log:
+        if '192.168.1.' in flow.src_addr and '192.168.1.' not in flow.dst_addr:
+            try:
+                counter[(flow.src_addr, flow.src_port)] += flow.octets
+            except KeyError:
+                counter[(flow.src_addr, flow.src_port)] = flow.octets
+    sortedValues = sorted(counter.values(), reverse=True)
+    sortedValues = sortedValues[:10]
+    for tuple, octets in counter.iteritems():
+        if octets in sortedValues:
+            ipports.append((tuple[0], tuple[1]))
+            octetsL.append(float(octets)/1024)
+    graphTitle = 'Top Local Hosts And Ports'
+    fileName = 'local_port_{0}.png'.format(file)
+    Graph(ipports, octetsL, graphTitle, fileName)
+
 def UserInput():
     print('Choose the Netflow file to anaylyze:')
     print('1. flowd_capture_1')
@@ -145,6 +167,8 @@ def UserInput():
             TopRemoteHosts(log, 'flowd_capture_1')
             log = flowd.FlowLog('flowd_capture_1')
             TopLocalToRemote(log, 'flowd_capture_1')
+            log = flowd.FlowLog('flowd_capture_1')
+            TopLocalHostLocalPort(log, 'flowd_capture_1')
         except IOError:
             print 'flowd_capture_1 not found.'
             return UserInput()
@@ -156,6 +180,8 @@ def UserInput():
             TopRemoteHosts(log, 'flowd_capture_2')
             log = flowd.FlowLog('flowd_capture_2')
             TopLocalToRemote(log, 'flowd_capture_2')
+            log = flowd.FlowLog('flowd_capture_2')
+            TopLocalHostLocalPort(log, 'flowd_capture_2')
         except IOError:
             print 'flowd_capture_2 not found.'
             return UserInput()
