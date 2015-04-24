@@ -51,6 +51,20 @@ def establish_connection(hostname, username, password):
     client.connect(hostname, 22, username, password, allow_agent=False, look_for_keys=False)
     return client
 
+def remove_http(data):
+    '''
+    Remove http if is enabled
+    '''
+    try:
+        tree = etree.fromstring(data)
+        for web_management in tree.iter('web-management'):
+            for http in web_management.iter('http'):
+                print 'Disabling the HTTP Service'
+                web_management.remove(http)
+    except xml.parsers.expat.ExpatError, ex:
+        print ex
+    return tree
+
 def remove_user(data, user_name):
     '''
     Remove a user from the xml element tree
@@ -60,7 +74,26 @@ def remove_user(data, user_name):
         for login in tree.iter('login'):
             for user in login.iter('user'):
                 if user.find('name').text == user_name:
+                    print 'Removing User Bob Kool'
                     login.remove(user)
+    except xml.parsers.expat.ExpatError, ex:
+        print ex
+    return tree
+
+def change_mtu(data):
+    '''
+    Change the MTU to 1500
+    '''
+    try:
+        tree = etree.fromstring(data)
+        for interfaces in tree.iter('interfaces'):
+            for interface in interfaces.iter('interface'):
+                if 'ge' in interface.find('name').text:
+                    for unit in interface.iter('unit'):
+                        if unit.find('mtu') is not None:
+                            print unit.find('mtu').text
+                        else:
+                            print unit.find('mtu')
     except xml.parsers.expat.ExpatError, ex:
         print ex
     return tree
@@ -88,11 +121,17 @@ def main():
             data = data.replace(']]>]]>', '')
             break
         data += channel.recv(1024)
-    #print data.strip()
+    print data.strip()
 
-    tree = remove_user(data, 'admin')
-    tree = etree.tostring(tree)
-    print tree
+    tree = change_mtu(data)
+    #data = etree.tostring(tree)
+    #print data
+    #tree = remove_user(data, 'bkool')
+    #data = etree.tostring(tree)
+    #print data
+    #tree = remove_http(data)
+    #data = etree.tostring(tree)
+    #print data
 
     # Create the shell channel, execute command & wait for response
     #(stdin, stdout, stderr) = client.exec_command('show ip int br')
