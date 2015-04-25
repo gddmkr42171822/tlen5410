@@ -104,6 +104,22 @@ def change_mtu(data):
         print ex
     return tree
 
+def change_snmp(data):
+    '''
+    Change the SNMP community string to read-only
+    '''
+    try:
+        tree = etree.fromstring(data)
+        for community in tree.iter('community'):
+            print community.find('name').text
+            print community.find('authorization').text
+            if community.find('authorization').text != 'read-only':
+                community.find('authorization').text = 'read-only'
+                print 'Set the SNMP community string' + community.find('name').text + ' to be read-only'
+    except xml.parsers.expat.ExpatError, ex:
+        print ex
+    return tree
+
 def main():
     client = establish_connection(hostname, username, password)
     transport = client.get_transport()
@@ -129,15 +145,17 @@ def main():
         data += channel.recv(1024)
     print data.strip()
 
+    '''
     tree = change_mtu(data)
     data = etree.tostring(tree)
+    tree = remove_user(data, 'bkool')
+    data = etree.tostring(tree)
+    tree = remove_http(data)
+    data = etree.tostring(tree)
+    '''
+    tree = change_snmp(data)
+    data = etree.tostring(tree)
     print data
-    #tree = remove_user(data, 'bkool')
-    #data = etree.tostring(tree)
-    #print data
-    #tree = remove_http(data)
-    #data = etree.tostring(tree)
-    #print data
 
     # Create the shell channel, execute command & wait for response
     #(stdin, stdout, stderr) = client.exec_command('show run')
