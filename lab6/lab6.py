@@ -6,6 +6,8 @@ Lab 6
 Sources:
 1. https://stackoverflow.com/questions/19419754/how-to-remove-a-node-inside-an-iterator-in-python-xml-etree-elementree
 - How remove a child node with an iterator to the parent
+2. http://lxml.de/1.3/tutorial.html
+- How to insert an element in the tree
 '''
 
 import paramiko
@@ -91,9 +93,13 @@ def change_mtu(data):
                 if 'ge' in interface.find('name').text:
                     for unit in interface.iter('unit'):
                         if unit.find('mtu') is not None:
-                            print unit.find('mtu').text
+                            if unit.find('mtu').text != '1500':
+                                print 'Set the MTU for ' + interface.find('name').text + ' to 1500'
+                                unit.find('mtu').text = '1500'
                         else:
-                            print unit.find('mtu')
+                            unit.insert(1, etree.Element('mtu'))
+                            print 'Set the MTU for ' + interface.find('name').text + ' to 1500'
+                            unit.find('mtu').text = '1500'
     except xml.parsers.expat.ExpatError, ex:
         print ex
     return tree
@@ -124,8 +130,8 @@ def main():
     print data.strip()
 
     tree = change_mtu(data)
-    #data = etree.tostring(tree)
-    #print data
+    data = etree.tostring(tree)
+    print data
     #tree = remove_user(data, 'bkool')
     #data = etree.tostring(tree)
     #print data
@@ -134,9 +140,9 @@ def main():
     #print data
 
     # Create the shell channel, execute command & wait for response
-    #(stdin, stdout, stderr) = client.exec_command('show ip int br')
+    #(stdin, stdout, stderr) = client.exec_command('show run')
     #for line in stdout.readlines():
-    #    print line
+        #print line
     client.close()
 
 
