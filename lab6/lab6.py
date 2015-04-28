@@ -62,7 +62,7 @@ class Router(object):
 
     def establish_connection(self, hostname, username, password):
         '''
-        Establish a connection to a router
+        Establish a connection to a router.
         '''
         client = paramiko.SSHClient()
         client.load_system_host_keys()
@@ -71,11 +71,17 @@ class Router(object):
         self.client = client
 
     def establish_channel(self):
+        '''
+        Establish a netconf channel to a router.
+        '''
         transport = self.client.get_transport()
         self.channel = transport.open_channel('session')
         self.channel.invoke_subsystem('netconf')
 
     def receive_data(self):
+        '''
+        Read data from a channel.
+        '''
         data = ""
         while True:
             if data.find(']]>]]>') != -1:
@@ -86,7 +92,7 @@ class Router(object):
 
     def remove_reply(self):
         '''
-        Remove rpc-reply and configuration from the request
+        Remove rpc-reply and configuration from the request.
         '''
         self.data = self.data.replace('<rpc-reply>', '')
         self.data = self.data.replace('</rpc-reply>', '')
@@ -94,7 +100,7 @@ class Router(object):
 
     def remove_http(self):
         '''
-        Remove http if is enabled
+        Remove http if is enabled.
         '''
         try:
             tree = etree.fromstring(self.data)
@@ -109,7 +115,7 @@ class Router(object):
 
     def remove_user(self):
         '''
-        Remove a user from the xml element tree
+        Remove a user from the xml element tree.
         '''
         try:
             tree = etree.fromstring(self.data)
@@ -125,7 +131,7 @@ class Router(object):
 
     def change_mtu(self):
         '''
-        Set the MTU to 1500
+        Set the MTU to 1500.
         '''
         try:
             tree = etree.fromstring(self.data)
@@ -149,7 +155,7 @@ class Router(object):
 
     def change_snmp(self):
         '''
-        Change the SNMP community string to read-only
+        Change the SNMP community string to read-only.
         '''
         try:
             tree = etree.fromstring(self.data)
@@ -163,6 +169,9 @@ class Router(object):
         self.data = etree.tostring(tree)
 
     def fix_xml(self):
+        '''
+        Change the received router configuration.
+        '''
         self.remove_http()
         self.remove_user()
         self.change_mtu()
@@ -170,6 +179,9 @@ class Router(object):
         self.remove_reply()
 
     def edit_config(self):
+        '''
+        Send the edited configuration back to the router.
+        '''
         self.data = oureditconfig_template + self.data + '\n</config>\n</edit-config>\n</rpc>\n]]>]]>\n'
         self.channel.send(self.data)
         self.receive_data()
